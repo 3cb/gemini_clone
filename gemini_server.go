@@ -1,10 +1,12 @@
 package main
 
 import (
+	"encoding/json"
 	"log"
 	"net/http"
-	"os"
+	"time"
 
+	"github.com/3cb/gemini_clone/ssc"
 	"github.com/gorilla/mux"
 )
 
@@ -21,24 +23,25 @@ func main() {
 		"wss://api.gemini.com/v1/marketdata/ethbtc",
 	}
 
-	logWS := log.New(os.Stdout, "", 0)
-	reconnect := make(chan string)
-	disconnect := make(chan string)
-	for _, v := range sockets {
-		go connnectWS(v, reconnect, disconnect, logWS)
-	}
+	pp := ssc.NewProducerPool(sockets)
 
 	go func() {
 		for {
-			ws := <-reconnect
-			go connnectWS(ws, reconnect, disconnect, logWS)
+			var message Message
+
+			v := <-pp.DataChan
+			err := json.Unmarshal(v.Payload, &message)
+			if err != nil {
+				log.Printf("Error: %v", err)
+			}
+			// log.Printf("DATA: %+v", message)
 		}
 	}()
 
-	// time.Sleep(10 * time.Second)
-	// for _, x := range sockets {
-	// 	disconnect <- x
-	// }
+	time.Sleep(10 * time.Second)
+	for _, x := range pp.Producers {
+		pp.DisconnectChan <- x
+	}
 
 	// start server
 	log.Fatal(http.ListenAndServe(":4000", r))
