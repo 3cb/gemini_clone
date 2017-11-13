@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
@@ -64,28 +65,24 @@ type Event struct {
 }
 
 // JSONRead is a method in the JSONReaderWriter interface that reads from websocket and sends to pool via channel
-func (m Message) JSONRead(s *ssc.Socket, toPoolJSON chan<- ssc.JSONReaderWriter, errorChan chan<- ssc.ErrorMsg) {
+func (m Message) JSONRead(s *ssc.Socket, toPoolJSON chan<- ssc.JSONReaderWriter, errorChan chan<- ssc.ErrorMsg) error {
 	err := s.Connection.ReadJSON(&m)
 	if err != nil {
-		log.Printf("Error reading message from websocket(%v): %v\n", s.URL, err)
-		errorChan <- ssc.ErrorMsg{URL: s.URL, Error: err}
-		return
+		return err
 	}
 	toPoolJSON <- m
+	return nil
 }
 
 // JSONWrite is a method in the JSONReaderWriter interface that takes values from the pool via channel and writes them to a websocket
-func (m Message) JSONWrite(s *ssc.Socket, fromPoolJSON <-chan ssc.JSONReaderWriter, errorChan chan<- ssc.ErrorMsg) {
+func (m Message) JSONWrite(s *ssc.Socket, fromPoolJSON <-chan ssc.JSONReaderWriter, errorChan chan<- ssc.ErrorMsg) error {
 	m, ok := (<-fromPoolJSON).(Message)
-	if ok == true {
-		err := s.Connection.WriteJSON(m)
-		if err != nil {
-			log.Printf("Error writing to websocket(%v): %v\n", s.URL, err)
-			errorChan <- ssc.ErrorMsg{URL: s.URL, Error: err}
-			return
-		}
-	} else {
-		log.Printf("Incorrect data type read from websocket(s.URL)\n")
-		return
+	if ok == false {
+		return fmt.Errorf("wrong data type sent from Pool to websocket goroutine(%v)", s.URL)
 	}
+	err := s.Connection.WriteJSON(m)
+	if err != nil {
+		return err
+	}
+	return nil
 }
