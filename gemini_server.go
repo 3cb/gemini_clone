@@ -3,7 +3,8 @@ package main
 import (
 	"log"
 	"net/http"
-	"os"
+
+	"github.com/3cb/ssc"
 
 	"github.com/gorilla/mux"
 )
@@ -21,19 +22,18 @@ func main() {
 		"wss://api.gemini.com/v1/marketdata/ethbtc",
 	}
 
-	logWS := log.New(os.Stdout, "", 0)
-	reconnect := make(chan string)
-	disconnect := make(chan string)
-	for _, v := range sockets {
-		go connnectWS(v, reconnect, disconnect, logWS)
+	// Start new websocket pool to connect to Gemini Websocket API
+	config := ssc.PoolConfig{
+		IsReadable: true,
+		IsWritable: false,
+		IsJSON:     true,
 	}
 
-	go func() {
-		for {
-			ws := <-reconnect
-			go connnectWS(ws, reconnect, disconnect, logWS)
-		}
-	}()
+	pp, err := ssc.NewSocketPool(sockets, config)
+	if err != nil {
+		log.Printf("Error starting new Socket Pool. Cannot start server.")
+		return
+	}
 
 	// time.Sleep(10 * time.Second)
 	// for _, x := range sockets {
@@ -61,4 +61,31 @@ type Event struct {
 	Delta     string `json:"delta"`
 	Remaining string `json:"remaining"`
 	Side      string `json:"side"`
+}
+
+// JSONRead is a method in the JSONReaderWriter interface that reads from websocket and sends to pool via channel
+func (m Message) JSONRead(s *ssc.Socket, toPoolJSON chan<- ssc.JSONReaderWriter, errorChan chan<- ssc.ErrorMsg) {
+	err := s.Connection.ReadJSON(&m)
+	if err != nil {
+		log.Printf("Error reading message from websocket(%v): %v\n", s.URL, err)
+		errorChan <- ssc.ErrorMsg{URL: s.URL, Error: err}
+		return
+	}
+	toPoolJSON <- m
+}
+
+// JSONWrite is a method in the JSONReaderWriter interface that takes values from the pool via channel and writes them to a websocket
+func (m Message) JSONWrite(s *ssc.Socket, fromPoolJSON <-chan ssc.JSONReaderWriter, errorChan chan<- ssc.ErrorMsg) {
+	m, ok := (<-fromPoolJSON).(Message)
+	if ok == true {
+		err := s.Connection.WriteJSON(m)
+		if err != nil {
+			log.Printf("Error writing to websocket(%v): %v\n", s.URL, err)
+			errorChan <- ssc.ErrorMsg{URL: s.URL, Error: err}
+			return
+		}
+	} else {
+		log.Printf("Incorrect data type read from websocket(s.URL)\n")
+		return
+	}
 }
