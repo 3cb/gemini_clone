@@ -13,8 +13,10 @@ export default new Vuex.Store({
         ws3: null,
         ws3Connected: false,
 
-        products: getProducts(['btcusd', 'ethusd', 'ethbtc']),
-        selected_product: ''
+        products: getProducts(['btcusd', 'ethusd', 'ethbtc']), // []
+        selected_product: '',
+
+        bookDepth: 30
     },
     mutations: {
         startWebsocket(state, socket) {
@@ -50,6 +52,8 @@ export default new Vuex.Store({
                     state.products[i].book.bids.push([ array[j].price, array[j].remaining ])
                 }
             }
+            state.products[i].book.asks = _.takeRight(state.products[i].book.asks, state.bookDepth)
+            state.products[i].book.bids = _.take(state.products[i].book.bids, state.bookDepth)
             console.log(state.products[i].book)
         }
     }
