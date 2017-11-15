@@ -7,7 +7,7 @@ function getProducts(array) {
             sequence: null,
             trades: [],
             book: {
-                asks: [],
+                asks: [], // [ price, size ]
                 bids: []
             }
         })

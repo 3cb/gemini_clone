@@ -40,7 +40,17 @@ export default new Vuex.Store({
         },
         initBook(state, { product, events, sequence }) {
             let i = _.findIndex(state.products, o => o.name === product)
-            
+
+            state.products[i].sequence = sequence
+            let array = _.orderBy(events, o => parseFloat(o.price), ['desc'])
+            for (let j = 0; j < array.length; j++) {
+                if (array[j].side === 'ask') {
+                    state.products[i].book.asks.push([ array[j].price, array[j].remaining ])
+                } else if (array[j].side === 'bid') {
+                    state.products[i].book.bids.push([ array[j].price, array[j].remaining ])
+                }
+            }
+            console.log(state.products[i].book)
         }
     }
 })
