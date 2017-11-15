@@ -1,16 +1,16 @@
 <template>
   <div id="app">
-    Hello
+    <dashboard></dashboard>
   </div>
 </template>
 
 <script>
+import Dashboard from './components/Dashboard.vue'
+
 export default {
   name: 'app',
-  data () {
-    return {
-      msg: 'Welcome to Your Vue.js App'
-    }
+  components: {
+    Dashboard
   }
 }
 </script>
