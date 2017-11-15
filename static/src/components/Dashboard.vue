@@ -3,7 +3,14 @@
     <div class="level logo is-size-5">
         <div class="level-item">
             <span class="icon">
-                <a href="https://github.com/3cb/gemini_clone" target="_blank"><i class="fa fa-github" aria-hidden="true"></i></a>
+                <a
+                    href="https://github.com/3cb/gemini_clone"
+                    target="_blank">
+                    <i
+                        class="fa fa-github"
+                        aria-hidden="true"
+                    ></i>
+                </a>
             </span>        
             <a href="https://gemini.com/" target="_blank">
                 <strong>GEMINI_clone</strong>
