@@ -16,5 +16,15 @@ export default {
 </script>
 
 <style>
+body {
+  height: 100%;
+}
 
+a {
+  color: hsl(0, 0%, 21%);
+}
+
+dashboard {
+  height: 100%;
+}
 </style>

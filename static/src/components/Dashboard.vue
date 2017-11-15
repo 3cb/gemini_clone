@@ -1,10 +1,34 @@
 <template>
-    <div>
-
+<div>
+    <div class="level logo is-size-5">
+        <div class="level-item">
+            <span class="icon">
+                <a href="https://github.com/3cb/gemini_clone" target="_blank"><i class="fa fa-github" aria-hidden="true"></i></a>
+            </span>        
+            <a href="https://gemini.com/" target="_blank">
+                <strong>GEMINI_clone</strong>
+            </a>
+        </div>
     </div>
+
+    <div class="columns">
+        <div class="column is-4">
+            <column-one id="col-one" class="col-cont"></column-one>
+        </div>
+        <div class="column is-4">
+            <column-two id="col-two" class="col-cont"></column-two>
+        </div>
+        <div class="column is-4">
+            <column-three id="col-three" class="col-cont"></column-three>
+        </div>
+    </div>
+</div>
 </template>
 
 <script>
+import ColumnOne from './ColumnOne.vue'
+import ColumnTwo from './ColumnTwo.vue'
+import ColumnThree from './ColumnThree.vue'
 import xs from 'xstream'
 import _ from 'lodash'
 
@@ -122,10 +146,31 @@ export default {
     mounted() {
         this.main$.addListener(this.mainListener)
         this.initBook$.addListener(this.initBookListener)
+    },
+    components: {
+        ColumnOne,
+        ColumnTwo,
+        ColumnThree
     }
 }
 </script>
 
 <style>
+.col-cont {
+    width: 50%;
+}
+.col-cont div {
+    width: 100%;
+}
 
+.logo {
+    height: 30px;
+    margin-top: 12px;
+}
+.logo a:hover {
+    color: hsl(171, 100%, 41%);
+}
+.header {
+    height: 35px;
+}
 </style>
