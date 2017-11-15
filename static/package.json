@@ -10,9 +10,10 @@
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
   },
   "dependencies": {
-    "most": "^1.7.2",
+    "lodash": "^4.17.4",
     "vue": "^2.4.4",
-    "vuex": "^3.0.1"
+    "vuex": "^3.0.1",
+    "xstream": "^11.0.0"
   },
   "browserslist": [
     "> 1%",
