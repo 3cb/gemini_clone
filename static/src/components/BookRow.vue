@@ -1,8 +1,8 @@
 <template>
     <li class="br-row">
         <!-- <span class="br-svg"></span> -->
-        <span class="br-size">{{ parseFloat(level[1]).toFixed(8) }}</span>
         <span class="br-price" :class="color">{{ level[0] | formatPrice }}</span>
+        <span class="br-size">{{ parseFloat(level[1]).toFixed(8) }}</span>
     </li>
 </template>
 
@@ -28,14 +28,7 @@ export default {
     justify-content: space-between;
     width: 100%;
     margin-top: -8px;
-    /* margin-bottom: -8px; */
 }
-/* .br-svg {
-    display: inline-flex;
-    flex-flow: row nowrap;
-    justify-content: flex-start;
-    flex: 0 1 10%;
-} */
 .br-size {
     display: inline-flex;
     flex-flow: row nowrap;
@@ -45,7 +38,7 @@ export default {
 .br-price {
     display: inline-flex;
     flex-flow: row nowrap;
-    justify-content: flex-end;
+    justify-content: flex-start;
     flex: 0 2 40%;
 }
 </style>

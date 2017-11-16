@@ -11,10 +11,10 @@
             </li>
         </ul>
     </div>
-    <ul class="spacer">
+    <ul class="spacer has-text-weight-semibold">
         <li>
-            <span>Spread</span>
-            <span class="is-pulled-right">{{ spread | formatSpread }}</span>
+            <span>{{ spread | formatSpread }}</span>
+            <span class="is-pulled-right">SPREAD</span>
         </li>
     </ul>
     <ul class="ob-bids">
@@ -75,6 +75,7 @@ export default {
     display: inline-flex;
     flex-flow: row nowrap;
     width: 100%;
+    color: hsl(217, 71%, 53%);
 }
 .spacer li {
     width: 100%;
@@ -83,18 +84,15 @@ export default {
 .ob-asks-wrapper {
     position: relative;
     height: calc(50vh - 115px);
-    /* margin-bottom: -5px; */
 }
 .ob-asks {
     position: absolute;
     bottom: 0;
     right: 0;
     overflow: hidden;
-  /* padding-bottom: 8px; */
 }
 .ob-bids {
     position: relative;
     top: 2px;
-    /* overflow: hidden; */
 }
 </style>
