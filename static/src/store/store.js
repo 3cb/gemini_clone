@@ -23,19 +23,16 @@ export default new Vuex.Store({
             if (socket === 'ws1') {
                 state.ws1 = new WebSocket("wss://api.gemini.com/v1/marketdata/btcusd")
                 state.ws1.onopen = event => {
-                    console.log(event)
                     state.ws1Connected = true
                 }
             } else if (socket === 'ws2') {
                 state.ws2 = new WebSocket("wss://api.gemini.com/v1/marketdata/ethusd")
                 state.ws2.onopen = event => {
-                    console.log(event)
                     state.ws2Connected = true
                 }
             } else if (socket === 'ws3') {
                 state.ws3 = new WebSocket("wss://api.gemini.com/v1/marketdata/ethbtc")
                 state.ws3.onopen = event => {
-                    console.log(event)
                     state.ws3Connected = true
                 }
             }
@@ -52,9 +49,35 @@ export default new Vuex.Store({
                     state.products[i].book.bids.push([ array[j].price, array[j].remaining ])
                 }
             }
-            state.products[i].book.asks = _.takeRight(state.products[i].book.asks, state.bookDepth)
-            state.products[i].book.bids = _.take(state.products[i].book.bids, state.bookDepth)
-            console.log(state.products[i].book)
+            state.products[i].book.asks = _.takeRight(state.products[i].book.asks, state.bookDepth * 15)
+            state.products[i].book.bids = _.take(state.products[i].book.bids, state.bookDepth * 15)
+        },
+        updateBook(state, { product, price, remaining, side, sequence }) {
+            let i = _.findIndex(state.products, o => o.name === product)
+            if (sequence < state.products[i].sequence) {
+                return
+            }
+            state.products[i].sequence = sequence
+
+            let j = _.findIndex(state.products[i].book[side], a => parseFloat(a[0]).toFixed(8) === parseFloat(price).toFixed(8))
+            if (j === -1) {
+                state.products[i].book[side] = _.concat(state.products[i].book[side], [[ price, remaining ]])
+                state.products[i].book[side] = _.orderBy(state.products[i].book[side], [a => parseFloat(a[0])], ['desc'])
+            } else {
+                if (remaining != 0) {
+                    let arr = state.products[i].book[side]
+                    arr[j] = [ parseFloat(price).toFixed(8), remaining ]
+                } else {
+                    _.pullAt(state.products[i].book[side], [j])
+                }
+            }
+
+            // trim length of order book
+            if (side === 'asks') {
+                _.takeRight(state.products[i].book[side], state.bookDepth * 15)
+            } else if (side === 'bids') {
+                _.take(state.products[i].book[side], state.bookDepth * 15)
+            }
         }
     }
 })

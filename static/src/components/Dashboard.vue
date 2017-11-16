@@ -1,35 +1,35 @@
 <template>
-<div>
-    <div class="level logo is-size-5">
-        <div class="level-item">
-            <span class="icon">
-                <a
-                    href="https://github.com/3cb/gemini_clone"
-                    target="_blank">
-                    <i
-                        class="fa fa-github"
-                        aria-hidden="true"
-                    ></i>
+    <div>
+        <div class="level logo is-size-5">
+            <div class="level-item">
+                <span class="icon">
+                    <a
+                        href="https://github.com/3cb/gemini_clone"
+                        target="_blank">
+                        <i
+                            class="fa fa-github"
+                            aria-hidden="true"
+                        ></i>
+                    </a>
+                </span>
+                <a href="https://gemini.com/" target="_blank">
+                    <strong>GEMINI_clone</strong>
                 </a>
-            </span>        
-            <a href="https://gemini.com/" target="_blank">
-                <strong>GEMINI_clone</strong>
-            </a>
+            </div>
         </div>
-    </div>
 
-    <div class="columns">
-        <div class="column is-4">
-            <column-one id="col-one" class="col-cont"></column-one>
-        </div>
-        <div class="column is-4">
-            <column-two id="col-two" class="col-cont"></column-two>
-        </div>
-        <div class="column is-4">
-            <column-three id="col-three" class="col-cont"></column-three>
+        <div class="columns">
+            <div class="column is-4">
+                <column-one id="col-one" class="col-cont"></column-one>
+            </div>
+            <div class="column is-4">
+                <column-two id="col-two" class="col-cont"></column-two>
+            </div>
+            <div class="column is-4">
+                <column-three id="col-three" class="col-cont"></column-three>
+            </div>
         </div>
     </div>
-</div>
 </template>
 
 <script>
@@ -84,6 +84,7 @@ export default {
                     }
                 }
             },
+            // =======  For Debugging -- Remove  ===================================
             mainListener: {
                 next: (value) => {
                     // console.log(value)
@@ -95,9 +96,10 @@ export default {
                     console.log("Main$ stream complete.")
                 }
             },
+            // =====================================================================
             initBookListener: {
                 next: (value) => {
-                    console.log(value)
+                    // console.log(value)
                     this.$store.commit('initBook', {
                         product: value.product,
                         events: value.events,
@@ -113,7 +115,23 @@ export default {
             },
             updateBookListener: {
                 next: (value) => {
-
+                    this.$store.commit('updateBook', {
+                        product: value.product,
+                        price: value.events[0].price,
+                        remaining: value.events[0].remaining,
+                        side: value.events[0].side+'s',
+                        sequence: value.socket_sequence
+                    })
+                    if (value.product === 'ethbtc') {
+                        // console.log(value)
+                    console.log({
+                        product: value.product,
+                        price: value.events[0].price,
+                        remaining: value.events[0].remaining,
+                        side: value.events[0].side+'s',
+                        sequence: value.socket_sequence
+                    })
+                    }
                 },
                 error: (err) => {
                     console.error(err)
@@ -148,11 +166,20 @@ export default {
         },
         updateBook$(){
             return xs.from(this.main$)
+                     .filter(v => v.events.length <= 2)
+                     .map(v => {
+                         let x = _.cloneDeep(v)
+                         if (v.events.length === 2) {
+                            x.events = _.reverse(x.events)
+                         }
+                         return x
+                     })
         }
     },
     mounted() {
         this.main$.addListener(this.mainListener)
         this.initBook$.addListener(this.initBookListener)
+        this.updateBook$.addListener(this.updateBookListener)
     },
     components: {
         ColumnOne,
@@ -175,7 +202,7 @@ export default {
     margin-top: 12px;
 }
 .logo a:hover {
-    color: hsl(171, 100%, 41%);
+    color: hsl(217, 71%, 53%);
 }
 .header {
     height: 35px;
