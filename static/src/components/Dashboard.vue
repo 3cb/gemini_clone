@@ -108,10 +108,10 @@ export default {
           });
         },
         error: err => {
-          console.error(err);
+          console.error(err)
         },
         complete: () => {
-          console.log("Book initialization stream complete.");
+          console.log("Book initialization stream complete.")
         }
       },
       updateBookListener: {
@@ -127,7 +127,7 @@ export default {
           console.error(err);
         },
         complete: () => {
-          console.log("Book update stream complete.");
+          console.log("Book update stream complete.")
         }
       },
       tradeListener: {
@@ -169,7 +169,7 @@ export default {
       })
     },
     initBook$() {
-      return xs.from(this.main$).filter(v => v.events[0].reason === "initial");
+      return xs.from(this.main$).filter(v => v.events[0].reason === "initial")
     },
     updateBook$() {
       return xs.from(this.main$)
