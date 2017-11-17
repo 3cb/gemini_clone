@@ -1,32 +1,40 @@
 <template>
-<div class="ob">
-    <div class="ob-asks-wrapper">
-        <ul class="ob-asks">
-            <li
-                is="book-row"
-                v-for="level in book.asks"
-                :level="level"
-                :color="'has-text-danger'"
-                :key="level[0]">
+    <div class="ob">
+        <ul class="spacer has-text-weight-semibold ob-header">
+            <li>
+                <span>Price({{ product.slice(3, 6).toUpperCase() }})</span>
+                <span class="is-pulled-right">Size({{ product.slice(0, 3).toUpperCase() }})</span>
             </li>
         </ul>
+        <div class="lower-wrapper">
+            <div class="ob-asks-wrapper">
+                <ul class="ob-asks">
+                    <li
+                        is="book-row"
+                        v-for="level in book.asks"
+                        :level="level"
+                        :color="'has-text-danger'"
+                        :key="level[0]">
+                    </li>
+                </ul>
+            </div>
+            <ul class="spacer has-text-weight-semibold">
+                <li>
+                    <span>{{ spread | formatSpread }}</span>
+                    <span class="is-pulled-right">SPREAD</span>
+                </li>
+            </ul>
+            <ul class="ob-bids">
+                <li
+                    is="book-row"
+                    v-for="level in book.bids"
+                    :level="level"
+                    :color="'has-text-success'"
+                    :key="level[0]">
+                </li>
+            </ul>
+        </div>
     </div>
-    <ul class="spacer has-text-weight-semibold">
-        <li>
-            <span>{{ spread | formatSpread }}</span>
-            <span class="is-pulled-right">SPREAD</span>
-        </li>
-    </ul>
-    <ul class="ob-bids">
-        <li
-            is="book-row"
-            v-for="level in book.bids"
-            :level="level"
-            :color="'has-text-success'"
-            :key="level[0]">
-        </li>
-    </ul>
-</div>
 </template>
 
 <script>
@@ -35,14 +43,14 @@ import BookRow from './BookRow.vue'
 export default {
     filters: {
         formatSpread(spread) {
-            if (spread >= .01) {
-                return spread.toFixed(2)
-            } else {
+            if (spread.toFixed(2) < .01) {
                 return spread.toFixed(5)
+            } else {
+                return spread.toFixed(2)
             }
         }
     },
-    props: ['book'],
+    props: ['book', 'product'],
     computed: {
         asks() {
             return this.book.asks
@@ -66,7 +74,6 @@ export default {
     width: 100%;
     height: calc(100vh - 115px);
     overflow: hidden;
-    
 }
 .spacer {
     position: relative;
@@ -81,9 +88,14 @@ export default {
     width: 100%;
 }
 
+.lower-wrapper {
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+}
 .ob-asks-wrapper {
     position: relative;
-    height: calc(50vh - 115px);
+    height: calc(50vh - 85px);
 }
 .ob-asks {
     position: absolute;
