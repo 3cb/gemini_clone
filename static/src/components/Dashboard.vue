@@ -120,8 +120,7 @@ export default {
             product: value.product,
             price: value.events[0].price,
             remaining: value.events[0].remaining,
-            side: value.events[0].side + "s",
-            sequence: value.socket_sequence
+            side: value.events[0].side
           });
         },
         error: err => {
@@ -153,21 +152,21 @@ export default {
   },
   computed: {
     ws1$() {
-      return xs.createWithMemory(this.producer1);
+      return xs.createWithMemory(this.producer1)
     },
     ws2$() {
-      return xs.createWithMemory(this.producer2);
+      return xs.createWithMemory(this.producer2)
     },
     ws3$() {
-      return xs.createWithMemory(this.producer3);
+      return xs.createWithMemory(this.producer3)
     },
     main$() {
       return xs.merge(this.ws1$, this.ws2$, this.ws3$).map(v => {
         return {
           ...JSON.parse(v.data),
           product: _.takeRight(v.target.url.split("/"), 1).join("")
-        };
-      });
+        }
+      })
     },
     initBook$() {
       return xs.from(this.main$).filter(v => v.events[0].reason === "initial");
@@ -177,12 +176,12 @@ export default {
               .filter(v => v.events.length <= 2)
               .map(v => {
                 if (v.events.length === 2) {
-                  let x = _.cloneDeep(v);
-                  x.events = _.reverse(x.events);
-                  return x;
+                  let x = _.cloneDeep(v)
+                  _.reverse(x.events)
+                  return x
                 }
-                return v;
-              });
+                return v
+              })
     },
     trade$() {
       return xs.from(this.main$)
@@ -190,11 +189,11 @@ export default {
     }
   },
   mounted() {
-    this.getTrades();
+    this.getTrades()
 
-    this.main$.addListener(this.mainListener);
-    this.initBook$.addListener(this.initBookListener);
-    // this.updateBook$.addListener(this.updateBookListener);
+    this.main$.addListener(this.mainListener)
+    this.initBook$.addListener(this.initBookListener)
+    this.updateBook$.addListener(this.updateBookListener)
     this.trade$.addListener(this.tradeListener)
   },
   methods: {
