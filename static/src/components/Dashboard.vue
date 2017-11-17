@@ -101,7 +101,6 @@ export default {
       // =====================================================================
       initBookListener: {
         next: value => {
-          // console.log(value)
           this.$store.commit("initBook", {
             product: value.product,
             events: value.events,
@@ -117,9 +116,6 @@ export default {
       },
       updateBookListener: {
         next: value => {
-          // if (value.events[1]) {
-          //     console.log(value)
-          // }
           this.$store.commit("updateBook", {
             product: value.product,
             price: value.events[0].price,
@@ -127,16 +123,6 @@ export default {
             side: value.events[0].side + "s",
             sequence: value.socket_sequence
           });
-          // if (value.product === 'ethbtc') {
-          //     // console.log(value)
-          // console.log({
-          //     product: value.product,
-          //     price: value.events[0].price,
-          //     remaining: value.events[0].remaining,
-          //     side: value.events[0].side+'s',
-          //     sequence: value.socket_sequence
-          // })
-          // }
         },
         error: err => {
           console.error(err);
@@ -147,7 +133,6 @@ export default {
       },
       tradeListener: {
         next: value => {
-          console.log(value)
           this.$store.commit('addTrade', {
             product: value.product,
             tid: value.events[0].tid,

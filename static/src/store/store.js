@@ -79,7 +79,6 @@ export default new Vuex.Store({
             }
         },
         initTrades(state, { product, data }) {
-            console.log(data)
             let i = _.findIndex(state.products, o => o.name === product)
             if (state.products[i].trades.length === 0) {
                 for (let j = 0; j < data.length; j++) {
@@ -92,9 +91,11 @@ export default new Vuex.Store({
                     })
                 }
             }
+            state.products[i].price = state.products[i].trades[0]
         },
         addTrade(state, { product, tid, price, size, time, side }) {
             let i = _.findIndex(state.products, o => o.name === product)
+            state.products[i].price = price
             state.products[i].trades.unshift({
                 tid,
                 price,
