@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" class="is-size-6">
     <dashboard></dashboard>
   </div>
 </template>
@@ -16,12 +16,17 @@ export default {
 </script>
 
 <style>
+html {
+  background-color: hsl(0, 0%, 21%);
+}
 body {
   height: 100%;
+  color: whitesmoke;
+  
 }
 
 a {
-  color: hsl(0, 0%, 21%);
+  color: whitesmoke;
 }
 
 dashboard {
