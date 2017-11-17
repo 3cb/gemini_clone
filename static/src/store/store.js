@@ -80,16 +80,14 @@ export default new Vuex.Store({
         },
         initTrades(state, { product, data }) {
             let i = _.findIndex(state.products, o => o.name === product)
-            if (state.products[i].trades.length === 0) {
-                for (let j = 0; j < data.length; j++) {
-                    state.products[i].trades.push({
-                        tid: data[j].tid,
-                        price: data[j].price,
-                        size: data[j].amount,
-                        time: data[j].timestampms,
-                        side: data[j].type
-                    })
-                }
+            for (let j = 0; j < data.length; j++) {
+                state.products[i].trades.push({
+                    tid: data[j].tid,
+                    price: data[j].price,
+                    size: data[j].amount,
+                    time: data[j].timestampms,
+                    side: data[j].type
+                })
             }
             state.products[i].price = state.products[i].trades[0].price
         },
