@@ -194,7 +194,7 @@ export default {
 
     this.main$.addListener(this.mainListener);
     this.initBook$.addListener(this.initBookListener);
-    this.updateBook$.addListener(this.updateBookListener);
+    // this.updateBook$.addListener(this.updateBookListener);
     this.trade$.addListener(this.tradeListener)
   },
   methods: {

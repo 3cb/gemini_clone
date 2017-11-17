@@ -11,7 +11,7 @@
                 <ul class="ob-asks">
                     <li
                         is="book-row"
-                        v-for="level in book.asks"
+                        v-for="level in asks"
                         :level="level"
                         :color="'has-text-danger'"
                         :key="level[0]">
@@ -27,7 +27,7 @@
             <ul class="ob-bids">
                 <li
                     is="book-row"
-                    v-for="level in book.bids"
+                    v-for="level in bids"
                     :level="level"
                     :color="'has-text-success'"
                     :key="level[0]">
@@ -53,13 +53,21 @@ export default {
     props: ['book', 'product'],
     computed: {
         asks() {
-            return this.book.asks
+            console.log(this.book)
+
+            return _.chain(this.book)
+                        .takeWhile(o => o.side === 'ask')
+                        .takeRight(this.$store.state.bookDepth)
+                        .value()
         },
         bids() {
-            return this.book.bids
+            return _.chain(this.book)
+                        .takeRightWhile(o => o.side === 'bid')
+                        .take(this.$store.state.bookDepth)
+                        .value()
         },
         spread() {
-            return parseFloat(this.book.asks[this.book.asks.length-1]) - parseFloat(this.book.bids[0])
+            return parseFloat(this.asks[this.asks.length-1].price) - parseFloat(this.bids[0].price)
         }
     },
     components: {

@@ -1,8 +1,7 @@
 <template>
     <li class="br-row">
-        <!-- <span class="br-svg"></span> -->
-        <span class="br-price" :class="color">{{ level[0] | formatPrice }}</span>
-        <span class="br-size">{{ parseFloat(level[1]).toFixed(8) }}</span>
+        <span class="br-price" :class="color">{{ level.price | formatPrice }}</span>
+        <span class="br-size">{{ parseFloat(level.size).toFixed(8) }}</span>
     </li>
 </template>
 

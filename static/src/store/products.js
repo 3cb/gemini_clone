@@ -6,10 +6,7 @@ function getProducts(array) {
             price: '',
             sequence: null,
             trades: [],
-            book: {
-                asks: [], // [ price, size ]
-                bids: []
-            }
+            book: []
         })
     }
     return products
