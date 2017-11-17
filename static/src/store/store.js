@@ -49,24 +49,23 @@ export default new Vuex.Store({
                     state.products[i].book.bids.push([ array[j].price, array[j].remaining ])
                 }
             }
-            state.products[i].book.asks = _.takeRight(state.products[i].book.asks, state.bookDepth * 15)
-            state.products[i].book.bids = _.take(state.products[i].book.bids, state.bookDepth * 15)
+            state.products[i].book.asks = _.takeRight(state.products[i].book.asks, state.bookDepth * 10)
+            state.products[i].book.bids = _.take(state.products[i].book.bids, state.bookDepth * 10)
         },
         updateBook(state, { product, price, remaining, side, sequence }) {
             let i = _.findIndex(state.products, o => o.name === product)
-            if (sequence < state.products[i].sequence) {
-                return
-            }
-            state.products[i].sequence = sequence
-
-            let j = _.findIndex(state.products[i].book[side], a => parseFloat(a[0]).toFixed(8) === parseFloat(price).toFixed(8))
+            // if (sequence < state.products[i].sequence) {
+            //     return
+            // }
+            // state.products[i].sequence = sequence
+            
+            let j = _.findIndex(state.products[i].book[side], a => parseFloat(a[0]) === parseFloat(price))
             if (j === -1) {
                 state.products[i].book[side] = _.concat(state.products[i].book[side], [[ price, remaining ]])
                 state.products[i].book[side] = _.orderBy(state.products[i].book[side], [a => parseFloat(a[0])], ['desc'])
             } else {
                 if (remaining != 0) {
-                    let arr = state.products[i].book[side]
-                    arr[j] = [ parseFloat(price).toFixed(8), remaining ]
+                   state.products[i].book[side][j][1] = remaining
                 } else {
                     _.pullAt(state.products[i].book[side], [j])
                 }
@@ -74,10 +73,35 @@ export default new Vuex.Store({
 
             // trim length of order book
             if (side === 'asks') {
-                _.takeRight(state.products[i].book[side], state.bookDepth * 15)
+                _.takeRight(state.products[i].book[side], state.bookDepth * 10)
             } else if (side === 'bids') {
-                _.take(state.products[i].book[side], state.bookDepth * 15)
+                _.take(state.products[i].book[side], state.bookDepth * 10)
             }
+        },
+        initTrades(state, { product, data }) {
+            console.log(data)
+            let i = _.findIndex(state.products, o => o.name === product)
+            if (state.products[i].trades.length === 0) {
+                for (let j = 0; j < data.length; j++) {
+                    state.products[i].trades.push({
+                        tid: data[j].tid,
+                        price: data[j].price,
+                        size: data[j].amount,
+                        time: data[j].timestampms,
+                        side: data[j].type
+                    })
+                }
+            }
+        },
+        addTrade(state, { product, tid, price, size, time, side }) {
+            let i = _.findIndex(state.products, o => o.name === product)
+            state.products[i].trades.unshift({
+                tid,
+                price,
+                size,
+                time,
+                side
+            })
         }
     }
 })
