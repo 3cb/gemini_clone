@@ -1,10 +1,6 @@
 <template>
     <div>
         <col-head :product="'BTC/USD'" :price="price"></col-head>
-        <!-- <div class="header is-marginless">
-            <div class="has-text-weight-semibold">BTC/USD</div>
-            <div class="">{{ trades[0].price }}</div>
-        </div> -->
         <div class="columns">
             <order-book class="column is-5" :book="book" :product="product"></order-book>
             <time-sales class="column is-7" :trades="trades" :product="product"></time-sales>

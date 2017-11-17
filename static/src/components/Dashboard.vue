@@ -253,4 +253,12 @@ order-book {
 time-sales {
   width: 50%;
 }
+
+.spin-parent {
+  position: relative;
+}
+.spinner {
+    position: absolute;
+    top: 50%;
+}
 </style>

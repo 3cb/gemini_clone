@@ -1,5 +1,5 @@
 <template>
-    <div class="ts-h">
+    <div class="ts-h spin-parent">
         <ul class="spacer has-text-weight-semibold">
             <li class="ts-wrapper">
                 <span class="ts-size">Size</span>
@@ -7,7 +7,7 @@
                 <span class="ts-time">Time</span>
             </li>
         </ul>
-        <ul>
+        <ul v-if="trades.length > 0">
             <li
                 v-for="(trade, index) in trades"
                 :key="trade.tid"
@@ -18,10 +18,17 @@
                 <span class="ts-time">{{ trade.time | formatTime }}</span>
             </li>
         </ul>
+        <spinner
+            v-else
+            size="large"
+            line-fg-color="hsl(217, 71%, 53%)"
+            class="spinner"
+        ></spinner>
     </div>
 </template>
 
 <script>
+import Spinner from 'vue-simple-spinner'
 import moment from 'moment'
 
 export default {
@@ -38,6 +45,9 @@ export default {
                 return parseFloat(price).toFixed(2)
             }
         }
+    },
+    components: {
+        Spinner
     }
 }
 </script>

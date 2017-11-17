@@ -1,10 +1,6 @@
 <template>
     <div>
         <col-head :product="'ETH/BTC'" :price="price"></col-head>
-        <!-- <nav class="level header is-marginless">
-            <div class="level-item">ETH/BTC</div>
-            <div class="level-item">{{ trades[0].price }}</div>
-        </nav> -->
         <div class="columns">
             <order-book class="column is-5" :book="book" :product="product"></order-book>
             <time-sales class="column is-7" :trades="trades" :product="product"></time-sales>

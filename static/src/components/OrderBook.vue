@@ -1,12 +1,12 @@
 <template>
-    <div class="ob">
+    <div class="ob spin-parent">
         <ul class="spacer has-text-weight-semibold ob-header">
             <li>
                 <span>Price({{ product.slice(3, 6).toUpperCase() }})</span>
                 <span class="is-pulled-right">Size({{ product.slice(0, 3).toUpperCase() }})</span>
             </li>
         </ul>
-        <div class="lower-wrapper">
+        <div v-if="book.length > 0" class="lower-wrapper">
             <div class="ob-asks-wrapper">
                 <ul class="ob-asks">
                     <li
@@ -34,11 +34,18 @@
                 </li>
             </ul>
         </div>
+        <spinner
+            v-else
+            size="large"
+            line-fg-color="hsl(217, 71%, 53%)"
+            class="spinner"
+        ></spinner>
     </div>
 </template>
 
 <script>
 import BookRow from './BookRow.vue'
+import Spinner from 'vue-simple-spinner'
 
 export default {
     filters: {
@@ -53,8 +60,6 @@ export default {
     props: ['book', 'product'],
     computed: {
         asks() {
-            console.log(this.book)
-
             return _.chain(this.book)
                         .takeWhile(o => o.side === 'ask')
                         .takeRight(this.$store.state.bookDepth)
@@ -67,18 +72,22 @@ export default {
                         .value()
         },
         spread() {
-            return parseFloat(this.asks[this.asks.length-1].price) - parseFloat(this.bids[0].price)
+            if (this.asks && this.bids) {
+                return parseFloat(this.asks[this.asks.length-1].price) - parseFloat(this.bids[0].price)
+            } else {
+                return 0.00
+            }
         }
     },
     components: {
-        BookRow
+        BookRow,
+        Spinner
     }
 }
 </script>
 
 <style>
 .ob {
-    position: relative;
     width: 100%;
     height: calc(100vh - 115px);
     overflow: hidden;
@@ -99,6 +108,7 @@ export default {
 .lower-wrapper {
     position: relative;
     height: 100%;
+    width: 100%;
     overflow: hidden;
 }
 .ob-asks-wrapper {
