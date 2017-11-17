@@ -1,6 +1,6 @@
 <template>
     <div>
-        <col-head :product="'BTC/USD'" :trades="trades"></col-head>
+        <col-head :product="'BTC/USD'" :price="price"></col-head>
         <!-- <div class="header is-marginless">
             <div class="has-text-weight-semibold">BTC/USD</div>
             <div class="">{{ trades[0].price }}</div>
@@ -27,6 +27,9 @@ export default {
     },
     trades() {
       return this.$store.state.products[0].trades;
+    },
+    price() {
+        return this.$store.state.products[0].price
     }
   },
   components: {

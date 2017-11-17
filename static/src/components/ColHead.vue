@@ -1,13 +1,13 @@
 <template>
     <div class="ch-wrapper">
         <span class="ch-product">{{ product }}</span>
-        <span class="ch-price">{{ trades[0].price }}</span>
+        <span class="ch-price">{{ price }}</span>
     </div>
 </template>
 
 <script>
 export default {
-    props: ['product', 'trades']
+    props: ['product', 'price']
 }
 </script>
 

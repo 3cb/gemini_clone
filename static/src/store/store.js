@@ -91,7 +91,7 @@ export default new Vuex.Store({
                     })
                 }
             }
-            state.products[i].price = state.products[i].trades[0]
+            state.products[i].price = state.products[i].trades[0].price
         },
         addTrade(state, { product, tid, price, size, time, side }) {
             let i = _.findIndex(state.products, o => o.name === product)

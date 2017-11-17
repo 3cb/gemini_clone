@@ -1,6 +1,6 @@
 <template>
     <div>
-        <col-head :product="'ETH/BTC'" :trades="trades"></col-head>
+        <col-head :product="'ETH/BTC'" :price="price"></col-head>
         <!-- <nav class="level header is-marginless">
             <div class="level-item">ETH/BTC</div>
             <div class="level-item">{{ trades[0].price }}</div>
@@ -27,6 +27,9 @@ export default {
         },
         trades() {
             return this.$store.state.products[2].trades
+        },
+        price() {
+            return this.$store.state.products[2].price
         }
     },
     components: {
