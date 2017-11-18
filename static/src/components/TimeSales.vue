@@ -17,6 +17,7 @@
                     v-for="(trade, index) in trades"
                     :key="trade.tid"
                     class="ts-wrapper"
+                    :class="trade.class"
                 >
                     <span class="ts-size">{{ parseFloat(trade.size).toFixed(8) }}</span>
                     <span class="ts-price">{{ trade.price | formatPrice }}</span>

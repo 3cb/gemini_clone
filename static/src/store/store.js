@@ -79,7 +79,8 @@ export default new Vuex.Store({
                     price: data[j].price,
                     size: data[j].amount,
                     time: data[j].timestampms,
-                    side: data[j].type
+                    side: data[j].type,
+                    class: data[j].type === 'sell' ? 'has-text-danger' : 'has-text-success'
                 })
             }
             state.products[i].price = state.products[i].trades[0].price
@@ -92,7 +93,8 @@ export default new Vuex.Store({
                 price,
                 size,
                 time,
-                side
+                side,
+                class: side === 'sell' ? 'has-text-danger' : 'has-text-success'
             })
         }
     }
