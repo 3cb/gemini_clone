@@ -1,6 +1,6 @@
 <template>
     <div>
-        <col-head :product="'ETH/BTC'" :price="price"></col-head>
+        <col-head :product="'ETH/BTC'" :price="price" :icon="'fa fa-btc'"></col-head>
         <div class="columns">
             <order-book class="column is-5" :book="book" :product="product"></order-book>
             <time-sales class="column is-7" :trades="trades" :product="product"></time-sales>

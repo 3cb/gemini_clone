@@ -1,6 +1,6 @@
 <template>
     <div>
-        <col-head :product="'BTC/USD'" :price="price"></col-head>
+        <col-head :product="'BTC/USD'" :price="price" :icon="'fa fa-usd'"></col-head>
         <div class="columns">
             <order-book class="column is-5" :book="book" :product="product"></order-book>
             <time-sales class="column is-7" :trades="trades" :product="product"></time-sales>
@@ -10,19 +10,19 @@
 
 <script>
 import ColHead from './ColHead.vue'
-import OrderBook from "./OrderBook.vue";
-import TimeSales from "./TimeSales.vue";
+import OrderBook from "./OrderBook.vue"
+import TimeSales from "./TimeSales.vue"
 
 export default {
   computed: {
     product() {
-      return this.$store.state.products[0].name;
+      return this.$store.state.products[0].name
     },
     book() {
-      return this.$store.state.products[0].book;
+      return this.$store.state.products[0].book
     },
     trades() {
-      return this.$store.state.products[0].trades;
+      return this.$store.state.products[0].trades
     },
     price() {
         return this.$store.state.products[0].price

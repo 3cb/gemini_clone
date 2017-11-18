@@ -1,13 +1,20 @@
 <template>
-    <div class="ch-wrapper">
+    <div class="ch-wrapper has-text-weight-semibold is-size-5">
         <span class="ch-product">{{ product }}</span>
-        <span class="ch-price">{{ price }}</span>
+        <span class="ch-price">
+            <span class="icon">
+                <i :class="icon" aria-hidden="true"></i>
+            </span>
+            <span>
+                {{ price }}
+            </span>
+        </span>
     </div>
 </template>
 
 <script>
 export default {
-    props: ['product', 'price']
+    props: ['product', 'price', 'icon']
 }
 </script>
 
@@ -23,6 +30,8 @@ export default {
     flex: 0 1 0%;
 }
 .ch-price {
+    display: inline-flex;
+    flex-flow: row nowrap;
     justify-content: flex-end;
     flex: 0 1 0%;
 }
