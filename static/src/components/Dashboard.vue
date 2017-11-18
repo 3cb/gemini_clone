@@ -242,6 +242,9 @@ export default {
 .col-cont div {
   width: 100%;
 }
+#col-one {
+  margin-left: 10px;
+}
 
 .logo {
   height: 30px;
