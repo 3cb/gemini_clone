@@ -18,7 +18,7 @@
             </div>
         </div>
 
-        <div class="columns">
+        <div v-if="win.width >= 1450" class="columns">
             <div class="column is-4 col-cont">
                 <column-one id="col-one"></column-one>
             </div>
@@ -28,6 +28,24 @@
             <div class="column is-4 col-cont">
                 <column-three id="col-three"></column-three>
             </div>
+        </div>
+
+        <div v-else>
+          <div class="columns is-centered">
+              <div class="column is-10">
+                  <column-one></column-one>
+              </div>
+          </div>
+          <div class="columns is-centered">
+              <div class="column is-10">
+                  <column-two></column-two>
+              </div>
+          </div>
+          <div class="columns is-centered">
+              <div class="column is-10">
+                  <column-three></column-three>
+              </div>
+          </div>
         </div>
     </div>
 </template>
@@ -151,6 +169,9 @@ export default {
     };
   },
   computed: {
+    win() {
+      return this.$store.state.win
+    },
     ws1$() {
       return xs.createWithMemory(this.producer1)
     },
