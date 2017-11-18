@@ -6,6 +6,10 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
+        win: {
+            width: null,
+            height: null
+        },
         ws1: null,
         ws1Connected: false,
         ws2: null,
@@ -19,6 +23,9 @@ export default new Vuex.Store({
         bookDepth: 30
     },
     mutations: {
+        setWin(state, win) {
+            state.win = win
+        },
         startWebsocket(state, socket) {
             if (socket === 'ws1') {
                 state.ws1 = new WebSocket("wss://api.gemini.com/v1/marketdata/btcusd")
