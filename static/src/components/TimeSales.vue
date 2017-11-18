@@ -8,15 +8,21 @@
             </li>
         </ul>
         <ul v-if="trades.length > 0">
-            <li
-                v-for="(trade, index) in trades"
-                :key="trade.tid"
-                class="ts-wrapper"
+            <transition-group
+                :css="false"
+                @before-enter="beforeEnter"
+                @enter="enter"
             >
-                <span class="ts-size">{{ parseFloat(trade.size).toFixed(8) }}</span>
-                <span class="ts-price">{{ trade.price | formatPrice }}</span>
-                <span class="ts-time">{{ trade.time | formatTime }}</span>
-            </li>
+                <li
+                    v-for="(trade, index) in trades"
+                    :key="trade.tid"
+                    class="ts-wrapper"
+                >
+                    <span class="ts-size">{{ parseFloat(trade.size).toFixed(8) }}</span>
+                    <span class="ts-price">{{ trade.price | formatPrice }}</span>
+                    <span class="ts-time">{{ trade.time | formatTime }}</span>
+                </li>
+            </transition-group>
         </ul>
         <spinner
             v-else
@@ -44,6 +50,25 @@ export default {
             } else {
                 return parseFloat(price).toFixed(2)
             }
+        }
+    },
+    methods: {
+        beforeEnter: function(el) {
+            el.style.opacity = 0
+            el.style.backgroundColor = '#7a7a7a'
+            },
+        enter: function(el, done) {
+            Velocity(el,
+            {
+                opacity: 1,
+                backgroundColor: '#363636'
+            },
+            {
+                duration: 600,
+                complete: function() {
+                done()
+                }
+            })
         }
     },
     components: {

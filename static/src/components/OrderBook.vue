@@ -9,13 +9,20 @@
         <div v-if="book.length > 0" class="lower-wrapper">
             <div class="ob-asks-wrapper">
                 <ul class="ob-asks">
-                    <li
-                        is="book-row"
-                        v-for="level in asks"
-                        :level="level"
-                        :color="'has-text-danger'"
-                        :key="level[0]">
-                    </li>
+                    <transition-group
+                        :css="false"
+                        @before-enter="beforeEnter"
+                        @enter="enter"
+                        @leave="leave"
+                    >
+                        <li
+                            is="book-row"
+                            v-for="level in asks"
+                            :level="level"
+                            :color="'has-text-danger'"
+                            :key="level.price">
+                        </li>
+                    </transition-group>
                 </ul>
             </div>
             <ul class="spacer has-text-weight-semibold">
@@ -25,13 +32,20 @@
                 </li>
             </ul>
             <ul class="ob-bids">
-                <li
-                    is="book-row"
-                    v-for="level in bids"
-                    :level="level"
-                    :color="'has-text-success'"
-                    :key="level[0]">
-                </li>
+                <transition-group
+                    :css="false"
+                    @before-enter="beforeEnter"
+                    @enter="enter"
+                    @leave="leave"
+                >
+                    <li
+                        is="book-row"
+                        v-for="level in bids"
+                        :level="level"
+                        :color="'has-text-success'"
+                        :key="level.price">
+                    </li>
+                </transition-group>
             </ul>
         </div>
         <spinner
@@ -77,6 +91,38 @@ export default {
             } else {
                 return 0.00
             }
+        }
+    },
+    methods: {
+        beforeEnter: function(el) {
+            el.style.opacity = 0
+            el.style.backgroundColor = '#7a7a7a'
+            },
+        enter: function(el, done) {
+            Velocity(el,
+            {
+                opacity: 1,
+                backgroundColor: '#363636'
+            },
+            {
+                duration: 400,
+                complete: function() {
+                done()
+                }
+            })
+        },
+        leave: function(el, done) {
+            Velocity(el,
+            {
+                color: '#000000'
+
+            },
+            {
+                duration: 200,
+                complete: function() {
+                    done()
+                }
+            })
         }
     },
     components: {
