@@ -21,7 +21,6 @@ func Trades() http.Handler {
 		}
 		defer resp.Body.Close()
 		data, err2 := ioutil.ReadAll(resp.Body)
-		log.Printf("%v\n", product)
 		if err2 != nil {
 			log.Printf("Error reading response body for %v: %v", product, err2)
 		}
