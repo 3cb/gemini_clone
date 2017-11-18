@@ -105,7 +105,7 @@ export default {
                 backgroundColor: '#363636'
             },
             {
-                duration: 400,
+                duration: 700,
                 complete: function() {
                 done()
                 }
@@ -118,7 +118,7 @@ export default {
 
             },
             {
-                duration: 200,
+                duration: 500,
                 complete: function() {
                     done()
                 }
