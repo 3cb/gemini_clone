@@ -10,6 +10,8 @@ export default new Vuex.Store({
             width: null,
             height: null
         },
+        ws: null,
+        wsConnected: false,
         ws1: null,
         ws1Connected: false,
         ws2: null,
@@ -26,24 +28,31 @@ export default new Vuex.Store({
         setWin(state, win) {
             state.win = win
         },
-        startWebsocket(state, socket) {
-            if (socket === 'ws1') {
-                state.ws1 = new WebSocket("wss://api.gemini.com/v1/marketdata/btcusd")
-                state.ws1.onopen = event => {
-                    state.ws1Connected = true
-                }
-            } else if (socket === 'ws2') {
-                state.ws2 = new WebSocket("wss://api.gemini.com/v1/marketdata/ethusd")
-                state.ws2.onopen = event => {
-                    state.ws2Connected = true
-                }
-            } else if (socket === 'ws3') {
-                state.ws3 = new WebSocket("wss://api.gemini.com/v1/marketdata/ethbtc")
-                state.ws3.onopen = event => {
-                    state.ws3Connected = true
-                }
+        startWS(state) {
+            state.ws = new WebSocket("ws://localhost:4000/ws")
+            state.ws.onopen = event => {
+                state.wsConnected = true
+                console.log(event)
             }
         },
+        // startWebsocket(state, socket) {
+        //     if (socket === 'ws1') {
+        //         state.ws1 = new WebSocket("wss://api.gemini.com/v1/marketdata/btcusd")
+        //         state.ws1.onopen = event => {
+        //             state.ws1Connected = true
+        //         }
+        //     } else if (socket === 'ws2') {
+        //         state.ws2 = new WebSocket("wss://api.gemini.com/v1/marketdata/ethusd")
+        //         state.ws2.onopen = event => {
+        //             state.ws2Connected = true
+        //         }
+        //     } else if (socket === 'ws3') {
+        //         state.ws3 = new WebSocket("wss://api.gemini.com/v1/marketdata/ethbtc")
+        //         state.ws3.onopen = event => {
+        //             state.ws3Connected = true
+        //         }
+        //     }
+        // },
         initBook(state, { product, events, sequence }) {
             let i = _.findIndex(state.products, o => o.name === product)
 

@@ -62,48 +62,56 @@ import { getBTCUSD, getETHUSD, getETHBTC } from "../lib/trades.js";
 export default {
   data() {
     return {
-      producer1: {
-        start: listener => {
-          this.$store.commit("startWebsocket", "ws1");
-          this.$store.state.ws1.onmessage = event => {
-            listener.next(event);
-          };
-        },
-        stop: () => {
-          this.$store.state.ws1.close();
-          this.$store.state.ws1.onclose = event => {
-            console.log(event);
-          };
+      ptoducer: {
+        start: (listener) => {
+          this.$store.commit('startWS')
+          this.$store.state.ws.onmessage = event => {
+            listener.next(event)
+          }
         }
       },
-      producer2: {
-        start: listener => {
-          this.$store.commit("startWebsocket", "ws2");
-          this.$store.state.ws2.onmessage = event => {
-            listener.next(event);
-          };
-        },
-        stop: () => {
-          this.$store.state.ws2.close();
-          this.$store.state.ws2.onclose = event => {
-            console.log(event);
-          };
-        }
-      },
-      producer3: {
-        start: listener => {
-          this.$store.commit("startWebsocket", "ws3");
-          this.$store.state.ws3.onmessage = event => {
-            listener.next(event);
-          };
-        },
-        stop: () => {
-          this.$store.state.ws3.close();
-          this.$store.state.ws3.onclose = event => {
-            console.log(event);
-          };
-        }
-      },
+      // producer1: {
+      //   start: listener => {
+      //     this.$store.commit("startWebsocket", "ws1");
+      //     this.$store.state.ws1.onmessage = event => {
+      //       listener.next(event);
+      //     };
+      //   },
+      //   stop: () => {
+      //     this.$store.state.ws1.close();
+      //     this.$store.state.ws1.onclose = event => {
+      //       console.log(event);
+      //     };
+      //   }
+      // },
+      // producer2: {
+      //   start: listener => {
+      //     this.$store.commit("startWebsocket", "ws2");
+      //     this.$store.state.ws2.onmessage = event => {
+      //       listener.next(event);
+      //     };
+      //   },
+      //   stop: () => {
+      //     this.$store.state.ws2.close();
+      //     this.$store.state.ws2.onclose = event => {
+      //       console.log(event);
+      //     };
+      //   }
+      // },
+      // producer3: {
+      //   start: listener => {
+      //     this.$store.commit("startWebsocket", "ws3");
+      //     this.$store.state.ws3.onmessage = event => {
+      //       listener.next(event);
+      //     };
+      //   },
+      //   stop: () => {
+      //     this.$store.state.ws3.close();
+      //     this.$store.state.ws3.onclose = event => {
+      //       console.log(event);
+      //     };
+      //   }
+      // },
       // =======  For Debugging -- Remove  ===================================
       mainListener: {
         next: value => {
@@ -135,6 +143,14 @@ export default {
       updateBookListener: {
         next: value => {
           this.$store.commit("updateBook", {
+    //   return xs.createWithMemory(this.producer1)
+    // },
+    // ws2$() {
+    //   return xs.createWithMemory(this.producer2)
+    // },
+    // ws3$() {
+    //   return xs.createWithMemory(this.producer3)
+    // },
             product: value.product,
             price: value.events[0].price,
             remaining: value.events[0].remaining,
@@ -172,17 +188,25 @@ export default {
     win() {
       return this.$store.state.win
     },
-    ws1$() {
-      return xs.createWithMemory(this.producer1)
-    },
-    ws2$() {
-      return xs.createWithMemory(this.producer2)
-    },
-    ws3$() {
-      return xs.createWithMemory(this.producer3)
-    },
+    // ws1$() {
+    //   return xs.createWithMemory(this.producer1)
+    // },
+    // ws2$() {
+    //   return xs.createWithMemory(this.producer2)
+    // },
+    // ws3$() {
+    //   return xs.createWithMemory(this.producer3)
+    // },
+    // main$() {
+    //   return xs.merge(this.ws1$, this.ws2$, this.ws3$).map(v => {
+    //     return {
+    //       ...JSON.parse(v.data),
+    //       product: _.takeRight(v.target.url.split("/"), 1).join("")
+    //     }
+    //   })
+    // },
     main$() {
-      return xs.merge(this.ws1$, this.ws2$, this.ws3$).map(v => {
+      return xs.createWithMemory(this.producer).map(v => {
         return {
           ...JSON.parse(v.data),
           product: _.takeRight(v.target.url.split("/"), 1).join("")
