@@ -101,7 +101,7 @@ export default new Vuex.Store({
                 size,
                 time,
                 side,
-                class: side === 'sell' ? 'has-text-danger' : 'has-text-success'
+                class: side === 'bid' ? 'has-text-danger' : 'has-text-success'
             })
         }
     }
