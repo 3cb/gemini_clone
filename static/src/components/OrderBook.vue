@@ -115,7 +115,6 @@ export default {
             Velocity(el,
             {
                 color: '#000000'
-
             },
             {
                 duration: 500,
