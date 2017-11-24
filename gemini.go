@@ -6,7 +6,6 @@ import (
 
 	"github.com/3cb/gemini_clone/handlers"
 	"github.com/gorilla/mux"
-	"github.com/gorilla/websocket"
 )
 
 func main() {
@@ -18,10 +17,6 @@ func main() {
 
 	// trade request routes
 	r.Handle("/api/trades/{product}", handlers.Trades())
-
-	// websocket request handler
-	var upgrader = &websocket.Upgrader{}
-	r.Handle("/ws", handlers.WebsocketRequest(upgrader))
 
 	// start server
 	log.Fatal(http.ListenAndServe(":4000", r))

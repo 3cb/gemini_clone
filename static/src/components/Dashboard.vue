@@ -104,18 +104,6 @@ export default {
           };
         }
       },
-      // =======  For Debugging -- Remove  ===================================
-      mainListener: {
-        next: value => {
-          // console.log(value)
-        },
-        error: err => {
-          console.error(err);
-        },
-        complete: () => {
-          console.log("Main$ stream complete.");
-        }
-      },
       // =====================================================================
       initBookListener: {
         next: value => {
@@ -212,7 +200,6 @@ export default {
   mounted() {
     this.getTrades()
 
-    this.main$.addListener(this.mainListener)
     this.initBook$.addListener(this.initBookListener)
     this.updateBook$.addListener(this.updateBookListener)
     this.trade$.addListener(this.tradeListener)
@@ -254,6 +241,9 @@ export default {
 }
 .col-cont div {
   width: 100%;
+}
+#col-one {
+  margin-left: 10px;
 }
 
 .logo {

@@ -46,9 +46,6 @@ export default new Vuex.Store({
         },
         initBook(state, { product, events, sequence }) {
             let i = _.findIndex(state.products, o => o.name === product)
-
-            state.products[i].sequence = sequence
-
             events = _.orderBy(events, o => parseFloat(o.price), ['asc'])
             for (let j = 0; j < events.length; j++) {
                 state.products[i].book.unshift({
@@ -60,7 +57,6 @@ export default new Vuex.Store({
         },
         updateBook(state, { product, price, remaining, side, sequence }) {
             let i = _.findIndex(state.products, o => o.name === product)
-
             let j = _.findIndex(state.products[i].book, o => parseFloat(o.price).toFixed(8) === parseFloat(price).toFixed(8))
             if (j < 0) {
                 state.products[i].book = _.concat(state.products[i].book, [{

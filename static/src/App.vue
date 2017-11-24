@@ -62,7 +62,6 @@ html {
 body {
   height: 100%;
   color: whitesmoke;
-  
 }
 
 a {
