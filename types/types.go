@@ -2,6 +2,7 @@ package types
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/3cb/ssc"
 )
@@ -9,6 +10,7 @@ import (
 // Message defines the structure of messages received from Gemini websocket
 type Message struct {
 	Type      string  `json:"type"`
+	Product   string  `json:"product"`
 	EventID   int     `json:"eventId"`
 	Sequence  int     `json:"socket_sequence"`
 	Events    []Event `json:"events"`
@@ -23,6 +25,10 @@ type Event struct {
 	Delta     string `json:"delta"`
 	Remaining string `json:"remaining"`
 	Side      string `json:"side"`
+
+	TID       int64  `json:"tid"`
+	Amount    string `json:"amount"`
+	MakerSide string `json:"makerSide"`
 }
 
 // JSONRead is a method in the JSONReaderWriter interface that reads from websocket and sends to pool via channel
@@ -31,6 +37,8 @@ func (m Message) JSONRead(s *ssc.Socket, toPoolJSON chan<- ssc.JSONReaderWriter,
 	if err != nil {
 		return err
 	}
+	slice := strings.Split(s.URL, "/")
+	m.Product = slice[len(slice)-1]
 	toPoolJSON <- m
 	return nil
 }

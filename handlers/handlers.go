@@ -39,16 +39,15 @@ func WebsocketRequest(upgrader *websocket.Upgrader) http.Handler {
 			log.Printf("Error starting new Socket Pool. Cannot start server.")
 			return
 		}
-		go pp.ControlJSON()
+		go pp.Control()
 
 		go func() {
 			for {
 				select {
 				default:
 					v := <-pp.Pipes.FromPoolJSON
+					// log.Printf("Message from Pool Controller:\n%v\n", v)
 					conn.WriteJSON(v)
-					// msg := <-pp.Pipes.FromPoolJSON
-					// log.Printf("Message from Pool Controller:\n%v\n", msg)
 				}
 			}
 		}()
@@ -67,7 +66,6 @@ func Trades() http.Handler {
 		}
 		defer resp.Body.Close()
 		data, err2 := ioutil.ReadAll(resp.Body)
-		log.Printf("%v\n", product)
 		if err2 != nil {
 			log.Printf("Error reading response body for %v: %v", product, err2)
 		}
