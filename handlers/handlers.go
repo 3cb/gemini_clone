@@ -45,7 +45,7 @@ func WebsocketRequest(upgrader *websocket.Upgrader) http.Handler {
 			for {
 				select {
 				default:
-					v := <-pp.Pipes.FromPoolJSON
+					v := <-pp.Pipes.OutboundJSON
 					// log.Printf("Message from Pool Controller:\n%v\n", v)
 					conn.WriteJSON(v)
 				}
