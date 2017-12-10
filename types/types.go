@@ -32,20 +32,20 @@ type Event struct {
 }
 
 // JSONRead is a method in the JSONReaderWriter interface that reads from websocket and sends to pool via channel
-func (m Message) JSONRead(s *ssc.Socket, toPoolJSON chan<- ssc.JSONReaderWriter, errorChan chan<- ssc.ErrorMsg) error {
+func (m Message) JSONRead(s *ssc.Socket, Socket2PoolJSON chan<- ssc.JSONReaderWriter) error {
 	err := s.Connection.ReadJSON(&m)
 	if err != nil {
 		return err
 	}
 	slice := strings.Split(s.URL, "/")
 	m.Product = slice[len(slice)-1]
-	toPoolJSON <- m
+	Socket2PoolJSON <- m
 	return nil
 }
 
 // JSONWrite is a method in the JSONReaderWriter interface that takes values from the pool via channel and writes them to a websocket
-func (m Message) JSONWrite(s *ssc.Socket, fromPoolJSON <-chan ssc.JSONReaderWriter, errorChan chan<- ssc.ErrorMsg) error {
-	m, ok := (<-fromPoolJSON).(Message)
+func (m Message) JSONWrite(s *ssc.Socket, Pool2SocketJSON <-chan ssc.JSONReaderWriter) error {
+	m, ok := (<-Pool2SocketJSON).(Message)
 	if ok == false {
 		return fmt.Errorf("wrong data type sent from Pool to websocket goroutine(%v)", s.URL)
 	}
