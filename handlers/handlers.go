@@ -28,13 +28,14 @@ func WebsocketRequest(upgrader *websocket.Upgrader) http.Handler {
 		}
 		// Start new websocket pool to connect to Gemini Websocket API
 		config := ssc.PoolConfig{
+			ServerURLs: sockets,
 			IsReadable: true,
 			IsWritable: false,
 			IsJSON:     true,
 			DataJSON:   types.Message{},
 		}
 
-		pp, err := ssc.NewSocketPool(sockets, config)
+		pp, err := ssc.NewSocketPool(config)
 		if err != nil {
 			log.Printf("Error starting new Socket Pool. Cannot start server.")
 			return
