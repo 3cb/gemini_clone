@@ -23,7 +23,7 @@ export default new Vuex.Store({
             state.win = win
         },
         startWS(state) {
-            state.ws = new WebSocket("ws://localhost:4000/ws")
+            state.ws = new WebSocket("ws://" + location.host + "/ws")
             state.ws.onopen = event => {
                 state.wsConnected = true
             }
