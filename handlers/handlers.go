@@ -1,10 +1,12 @@
 package handlers
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strings"
 
 	"github.com/3cb/gemini_clone/types"
 	"github.com/3cb/ssc"
@@ -27,12 +29,10 @@ func WebsocketRequest(upgrader *websocket.Upgrader) http.Handler {
 			"wss://api.gemini.com/v1/marketdata/ethbtc",
 		}
 		// Start new websocket pool to connect to Gemini Websocket API
-		config := ssc.PoolConfig{
+		config := ssc.Config{
 			ServerURLs: sockets,
 			IsReadable: true,
 			IsWritable: false,
-			IsJSON:     true,
-			DataJSON:   types.Message{},
 		}
 
 		pp, err := ssc.NewSocketPool(config)
@@ -40,15 +40,22 @@ func WebsocketRequest(upgrader *websocket.Upgrader) http.Handler {
 			log.Printf("Error starting new Socket Pool. Cannot start server.")
 			return
 		}
-		go pp.Control()
 
 		go func() {
+			m := types.Message{}
 			for {
-				select {
-				default:
-					v := <-pp.Pipes.OutboundJSON
-					// log.Printf("Message from Pool Controller:\n%v\n", v)
-					conn.WriteJSON(v)
+				v := <-pp.Pipes.Outbound
+				if v.Type == 1 {
+					err := json.Unmarshal(v.Payload, &m)
+					if err != nil {
+						log.Printf("error receiving message: %v", err)
+					}
+					slice := strings.Split(v.URL, "/")
+					m.Product = slice[len(slice)-1]
+
+					conn.WriteJSON(m)
+				} else {
+					log.Printf("wrong message type from websocket.")
 				}
 			}
 		}()
