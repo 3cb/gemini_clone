@@ -3,7 +3,7 @@ A Gemini Bitcoin Exchange clone built on Vue/Vuex with xstream for websocket str
 Compare to https://gemini.com/ (API Docs: https://docs.gemini.com/websocket-api/)
 > master branch connects to Gemini websocket API directly from browser (3 concurrent connections).
 > go_stream branch multiplexes three websockets with Go and streams them to browser through one websocket connection.
-> Note: go_stream branch will currently not work properly with multiple concurrent connections.
+> __Note: go_stream branch will currently not work properly with multiple concurrent connections.__
 
 ## Build Setup
 
