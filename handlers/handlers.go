@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/3cb/gemini_clone/types"
 	"github.com/3cb/ssc"
@@ -28,14 +29,8 @@ func WebsocketRequest(upgrader *websocket.Upgrader) http.Handler {
 			"wss://api.gemini.com/v1/marketdata/ethusd",
 			"wss://api.gemini.com/v1/marketdata/ethbtc",
 		}
-		// Start new websocket pool to connect to Gemini Websocket API
-		config := ssc.Config{
-			ServerURLs: sockets,
-			IsReadable: true,
-			IsWritable: false,
-		}
 
-		pp, err := ssc.NewSocketPool(config)
+		pp, err := ssc.NewSocketPool(sockets, time.Second*0)
 		if err != nil {
 			log.Printf("Error starting new Socket Pool. Cannot start server.")
 			return
@@ -50,7 +45,7 @@ func WebsocketRequest(upgrader *websocket.Upgrader) http.Handler {
 					if err != nil {
 						log.Printf("error receiving message: %v", err)
 					}
-					slice := strings.Split(v.URL, "/")
+					slice := strings.Split(v.ID, "/")
 					m.Product = slice[len(slice)-1]
 
 					conn.WriteJSON(m)
