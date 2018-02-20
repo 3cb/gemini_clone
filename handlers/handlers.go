@@ -30,7 +30,8 @@ func WebsocketRequest(upgrader *websocket.Upgrader) http.Handler {
 			"wss://api.gemini.com/v1/marketdata/ethbtc",
 		}
 
-		pp, err := ssc.NewSocketPool(sockets, time.Second*0)
+		pp := ssc.NewPool(sockets, time.Second*30)
+		err = pp.Start()
 		if err != nil {
 			log.Printf("Error starting new Socket Pool. Cannot start server.")
 			return
@@ -39,7 +40,7 @@ func WebsocketRequest(upgrader *websocket.Upgrader) http.Handler {
 		go func() {
 			m := types.Message{}
 			for {
-				v := <-pp.Pipes.Outbound
+				v := <-pp.Outbound
 				if v.Type == 1 {
 					err := json.Unmarshal(v.Payload, &m)
 					if err != nil {
